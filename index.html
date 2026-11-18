@@ -112,7 +112,11 @@
       .then(response=>{if(!response.ok)throw new Error('No release');return response.json()})
       .then(release=>{
         if(release.draft||release.prerelease)return;
-        const files={Windows:'TraceExplorer-Setup.exe',macOS:'TraceExplorer-Installer.pkg'};
+        const version=release.tag_name.replace(/^v/,'');
+const files={
+  Windows:`TraceExplorer-Setup-${version}.exe`,
+  macOS:`TraceExplorer-${version}.pkg`
+};
         for(const [platform,name] of Object.entries(files)){
           const asset=(release.assets||[]).find(item=>item.name===name&&item.state==='uploaded');
           const prefix='https://github.com/Gerlach-Software/TraceExplorer-Downloads/releases/download/';
